@@ -7,10 +7,9 @@ const RSVPSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     guestName: '',
-    email: '',
+    phoneNumber: '',
     attendees: '1',
     attending: 'yes',
-    dietaryRestrictions: '',
     songRequest: '',
     message: ''
   });
@@ -27,10 +26,21 @@ const RSVPSection = () => {
     e.preventDefault();
     
     // Basic validation
-    if (!formData.guestName || !formData.email) {
+    if (!formData.guestName || !formData.phoneNumber) {
       toast({
         title: "Please fill in required fields",
-        description: "Name and email are required to RSVP.",
+        description: "Name and phone number are required to RSVP.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Phone number validation (basic)
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phoneRegex.test(formData.phoneNumber.replace(/[-\s\(\)]/g, ''))) {
+      toast({
+        title: "Invalid phone number",
+        description: "Please enter a valid phone number.",
         variant: "destructive"
       });
       return;
@@ -101,18 +111,18 @@ const RSVPSection = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                Email Address *
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-foreground mb-2">
+                Phone Number *
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 onChange={handleInputChange}
                 required
                 className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-background"
-                placeholder="Enter your email"
+                placeholder="Enter your phone number"
               />
             </div>
           </div>
@@ -153,20 +163,6 @@ const RSVPSection = () => {
             </div>
           </div>
 
-          <div className="mb-6">
-            <label htmlFor="dietaryRestrictions" className="block text-sm font-medium text-foreground mb-2">
-              Dietary Restrictions or Allergies
-            </label>
-            <input
-              type="text"
-              id="dietaryRestrictions"
-              name="dietaryRestrictions"
-              value={formData.dietaryRestrictions}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-background"
-              placeholder="Let us know about any dietary needs"
-            />
-          </div>
 
           <div className="mb-6">
             <label htmlFor="songRequest" className="block text-sm font-medium text-foreground mb-2">
